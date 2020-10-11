@@ -11,7 +11,7 @@ class Warning : ArrayList<Warning.WarningItem>(){
         val issued: String,
         val level: String,
         val onset: String,
-        val regions: List<String>,
+        var regions: List<String>,
         val severity: String,
         val status: String,
         val type: String,
