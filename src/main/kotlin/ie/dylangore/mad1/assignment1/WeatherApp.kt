@@ -4,7 +4,8 @@ import ie.dylangore.mad1.assignment1.ui.MainView
 import ie.dylangore.mad1.assignment1.ui.Styles
 import javafx.stage.Stage
 import mu.KotlinLogging
-import tornadofx.*
+import tornadofx.App
+import tornadofx.launch
 
 val logger = KotlinLogging.logger {}
 
