@@ -6,6 +6,10 @@ import tornadofx.box
 import tornadofx.cssclass
 import tornadofx.px
 
+/**
+ * TornadoFX UI Styles class
+ *
+ */
 class Styles : Stylesheet() {
     companion object {
         val heading by cssclass()

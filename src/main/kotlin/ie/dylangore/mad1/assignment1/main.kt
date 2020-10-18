@@ -3,6 +3,11 @@ package ie.dylangore.mad1.assignment1
 import ie.dylangore.mad1.assignment1.weather.Forecasts
 import ie.dylangore.mad1.assignment1.weather.Warnings
 
+/**
+ * Main entrypoint for the console version of the application
+ *
+ * @param args
+ */
 fun main(args: Array<String>) {
     logger.info("Launching Console-Only mode")
 

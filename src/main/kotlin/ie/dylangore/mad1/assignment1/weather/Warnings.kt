@@ -6,6 +6,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
 
+/**
+ * Object that handles getting and formatting weather warning data from Met Éireann
+ */
 object Warnings {
     // Create the HTTP client used to communicate with the API
     private val client = OkHttpClient()
@@ -63,11 +66,19 @@ object Warnings {
         "EI825" to "IrishSea-IOM-N",
     )
 
+    @Suppress("SpellCheckingInspection")
     // List containing all counties that Met Éireann will provide warnings for, in the order that they generally use
     private val allCounties: List<String> = listOf("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth",
         "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow", "Clare", "Cork", "Kerry", "Limerick", "Tipperary",
         "Waterford", "Galway", "Leitrim", "Mayo", "Roscommon", "Sligo", "Cavan", "Donegal", "Monaghan")
 
+    /**
+     * Make a HTTP request to the Met Éireann Weather Warning API to get
+     * all current weather warnings in JSON format
+     *
+     * @param url the URL of the weather warning API
+     * @return the JSON string of data
+     */
     private fun apiRequest(url: String = "https://www.met.ie/Open_Data/json/warning_IRELAND.json"): String {
         val request = Request.Builder().url(url).build()
         var result : String
@@ -79,6 +90,12 @@ object Warnings {
         return(result)
     }
 
+    /**
+     * Function to parse the JSON data provided by the API and return it as a list of WarningItems
+     *
+     * @param data the JSON data provided by the weather warning API
+     * @return the list of WarningItems
+     */
     fun getWeatherWarnings(data: String = apiRequest()): List<Warning.WarningItem> {
         val warnings: List<Warning.WarningItem> = Klaxon().parseArray(data)!!
         // Loop through each entry and replce the region FIPS/EMMA ID code with the region name

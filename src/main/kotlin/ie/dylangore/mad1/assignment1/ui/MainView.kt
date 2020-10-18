@@ -5,6 +5,10 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import tornadofx.*
 
+/**
+ * Create the main UI view
+ *
+ */
 class MainView : View("Weather") {
 
     var weatherOverview = SimpleStringProperty("Default")

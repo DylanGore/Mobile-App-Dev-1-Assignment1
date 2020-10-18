@@ -9,6 +9,10 @@ import tornadofx.launch
 
 val logger = KotlinLogging.logger {}
 
+/**
+ * Main entrypoint for the GUI version of the app
+ *
+ */
 class WeatherApp: App(MainView::class, Styles::class){
     override fun start(stage: Stage) {
         stage.isResizable = false
@@ -18,6 +22,11 @@ class WeatherApp: App(MainView::class, Styles::class){
     }
 }
 
+/**
+ * Main function that launches the GUI
+ *
+ * @param args
+ */
 fun main(args: Array<String>) {
     logger.info { "Mobile App Dev 1 Assignment 1" }
     launch<WeatherApp>()
