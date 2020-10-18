@@ -7,9 +7,11 @@ import okhttp3.Request
 import okio.IOException
 
 object Warnings {
+    // Create the HTTP client used to communicate with the API
     private val client = OkHttpClient()
 
     @Suppress("SpellCheckingInspection")
+    // Map of region codes to region names
     private val regionMap: Map<String, String> = mapOf(
         "EI01" to "Carlow",
         "EI02" to "Cavan",
@@ -61,6 +63,11 @@ object Warnings {
         "EI825" to "IrishSea-IOM-N",
     )
 
+    // List containing all counties that Met Éireann will provide warnings for, in the order that they generally use
+    private val allCounties: List<String> = listOf("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth",
+        "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow", "Clare", "Cork", "Kerry", "Limerick", "Tipperary",
+        "Waterford", "Galway", "Leitrim", "Mayo", "Roscommon", "Sligo", "Cavan", "Donegal", "Monaghan")
+
     private fun apiRequest(url: String = "https://www.met.ie/Open_Data/json/warning_IRELAND.json"): String {
         val request = Request.Builder().url(url).build()
         var result : String
@@ -71,6 +78,7 @@ object Warnings {
         }
         return(result)
     }
+
     fun getWeatherWarnings(data: String = apiRequest()): List<Warning.WarningItem> {
         val warnings: List<Warning.WarningItem> = Klaxon().parseArray(data)!!
         // Loop through each entry and replce the region FIPS/EMMA ID code with the region name
@@ -86,6 +94,15 @@ object Warnings {
                     newRegionList.add(region)
                 }
             }
+
+            // If list contains all 26 counties, replace them with one value to represent the entire country
+            if (newRegionList.containsAll(allCounties)){
+                for ( county in allCounties ){
+                    newRegionList.remove(county)
+                }
+                newRegionList.add("Ireland")
+            }
+
             // Set the regions for this warning to the new list
             item.regions = newRegionList
         }

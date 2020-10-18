@@ -6,5 +6,8 @@ fun main(args: Array<String>) {
     logger.info("Launching Console-Only mode")
 
     val warnings = Warnings.getWeatherWarnings()
-    println("""Weather Warnings (${warnings.size}) $warnings""")
+    println("""Weather Warnings (${warnings.size})""")
+    for ( item in warnings ){
+        println(item.headline)
+    }
 }
