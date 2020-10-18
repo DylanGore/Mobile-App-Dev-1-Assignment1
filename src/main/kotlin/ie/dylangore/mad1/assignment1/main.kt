@@ -1,5 +1,6 @@
 package ie.dylangore.mad1.assignment1
 
+import ie.dylangore.mad1.assignment1.weather.Forecasts
 import ie.dylangore.mad1.assignment1.weather.Warnings
 
 fun main(args: Array<String>) {
@@ -10,4 +11,6 @@ fun main(args: Array<String>) {
     for ( item in warnings ){
         println(item.headline)
     }
+    val forecast = Forecasts.getForecast()
+    println("Forecast: $forecast")
 }
