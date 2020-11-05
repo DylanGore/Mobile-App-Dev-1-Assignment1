@@ -38,11 +38,16 @@ object Forecasts {
     /**
      * Convert the forecast JSON from Met.No to the Forecast data object
      *
-     * @param data the forecast data as a JSON string
-     * @return the forecast data as a Forecast object
+     * @param latitude the latitude of the location
+     * @param longitude the longitude of the location
+     * @param altitude the altitude of the location (default: 0)
+     * @param data the forecast data passed as a string, used for testing (default: empty)
+     * @return the weather forecast for the given location as a Forecast object
      */
-    fun getForecast(latitude:Double = 52.2461, longitude:Double = -7.1387, altitude: Int = 0): Forecast? {
-        val data: String = apiRequest(latitude = latitude, longitude = longitude, altitude = altitude)
-        return (Klaxon().parse(data))
+    fun getForecast(latitude:Double = 52.2461, longitude:Double = -7.1387, altitude: Int = 0, data:String = ""): Forecast? {
+        // Check if data has been passed as a string, if not get new data from the API
+        val forecastData: String = if (data.isEmpty()) apiRequest(latitude = latitude, longitude = longitude, altitude = altitude) else data
+        // Parse the data and return it as a Forecast object
+        return (Klaxon().parse(forecastData))
     }
 }

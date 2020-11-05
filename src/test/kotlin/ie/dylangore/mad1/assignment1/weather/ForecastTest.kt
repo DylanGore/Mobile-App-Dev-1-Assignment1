@@ -20,6 +20,6 @@ class ForecastTest {
      */
     @Test
     fun testForecastParserLocalData() {
-        Assertions.assertNotNull(Forecasts.getForecast(File("src/test/resources/sample_forecast.json").readText()))
+        Assertions.assertNotNull(Forecasts.getForecast(data = File("src/test/resources/sample_forecast.json").readText()))
     }
 }
