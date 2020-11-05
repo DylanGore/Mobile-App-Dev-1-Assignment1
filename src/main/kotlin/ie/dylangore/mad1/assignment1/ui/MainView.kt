@@ -1,6 +1,7 @@
 package ie.dylangore.mad1.assignment1.ui
 
 import ie.dylangore.mad1.assignment1.logger
+import ie.dylangore.mad1.assignment1.weather.Warnings
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import tornadofx.*
@@ -24,7 +25,13 @@ class MainView : View("Weather") {
             alignment = Pos.BASELINE_CENTER
             button("Update Weather Data") {
                 action { logger.info("Update weather data")
-                    weatherOverview.set("Weather Info")
+                    val warnings = Warnings.getWeatherWarnings()
+                    weatherOverview.set("""Weather Warnings (${warnings.size})""")
+                    var currentText = weatherOverview.get();
+                    for ( item in warnings ){
+                        weatherOverview.set(currentText + "\n\n" + item.headline + "\n" + item.description);
+                        currentText = weatherOverview.get();
+                    }
                 }
             }
             button("Manage Places") {
