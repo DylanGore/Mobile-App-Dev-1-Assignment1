@@ -41,7 +41,8 @@ object Forecasts {
      * @param data the forecast data as a JSON string
      * @return the forecast data as a Forecast object
      */
-    fun getForecast(data: String = apiRequest()): Forecast? {
+    fun getForecast(latitude:Double = 52.2461, longitude:Double = -7.1387, altitude: Int = 0): Forecast? {
+        val data: String = apiRequest(latitude = latitude, longitude = longitude, altitude = altitude)
         return (Klaxon().parse(data))
     }
 }
