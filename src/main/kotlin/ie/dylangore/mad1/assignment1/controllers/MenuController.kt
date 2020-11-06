@@ -6,7 +6,6 @@ import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
 import ie.dylangore.mad1.assignment1.models.Location
 import ie.dylangore.mad1.assignment1.sampledata.SampleData
 import ie.dylangore.mad1.assignment1.weather.Warnings
-import java.io.File
 
 /**
  * Controller class for the main menu

@@ -3,12 +3,21 @@ package ie.dylangore.mad1.assignment1.views
 import com.github.ajalt.mordant.TermColors
 import ie.dylangore.mad1.assignment1.helpers.InputHelper.getIntInput
 import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
+import ie.dylangore.mad1.assignment1.helpers.TimeHelper
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiClock
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiCloud
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiHumidity
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiPressure
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiTemp
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiWeather
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiWind
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.getWeatherIcon
+import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.symbolDegree
 import ie.dylangore.mad1.assignment1.models.Warning
 import ie.dylangore.mad1.assignment1.selectedLocation
 import ie.dylangore.mad1.assignment1.weather.Forecasts
 import ie.dylangore.mad1.assignment1.weather.Stations
 import ie.dylangore.mad1.assignment1.weather.Warnings
-import java.text.SimpleDateFormat
 
 /**
  * View class for the main menu
@@ -24,7 +33,7 @@ class MenuView {
         // Display the menu (With colour in supported environments)
         with(TermColors()) {
             println()
-            println((bold + brightBlue)(String(Character.toChars(0x26C5)) + " Weather Info"))
+            println((bold + brightBlue)("$emojiWeather Weather Info"))
             val titleStyle = (red + underline)
             println(titleStyle("Main Menu"))
             println("1. List Weather Warnings")
@@ -72,24 +81,16 @@ class MenuView {
         clearTerminal()
         // Met Éireann Observation Stations
         val stations = Stations.getMetEireannStations()
-        // The timestamp format stored with each station
-        val timestampFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        // The format to display each timstamp in
-        val displayFormat = SimpleDateFormat("HH:mm dd/MM/yyyy")
         if (stations != null) {
             println("Met Éireann Observation Stations (${stations.size})")
             for (item in stations) {
-                val timestamp:String = displayFormat.format(timestampFormat.parse(item.time)).toString()
+                val timestamp:String = TimeHelper.getDisplayString(TimeHelper.fromISO8601(item.time))
                 val temperature: String = if (item.temperature != null) item.temperature.toString() else "N/A"
                 val humidity: String = if (item.humidity != null) item.humidity.toString() else "N/A"
                 val pressure: String = if (item.pressure != null) item.pressure.toString() else "N/A"
                 val wind: String = if (item.wind_speed != null) item.wind_speed.toString() else "N/A"
                 with(TermColors()) {
-                    println("${bold(item.location)} - ${String(Character.toChars(0x1F550))}${red(" Time: $timestamp")} ${String(Character.toChars(0x1F321))}${red(" Temp: $temperature °C")}  ${
-                        String(Character.toChars(0x1F4A7))
-                    }${green(" Hum: $humidity%")}  ${String(Character.toChars(0x2652))}${blue(" Pres: $pressure hPa")} ${
-                        String(Character.toChars(0x1F300))
-                    }${white(" Wind: $wind km/h")}")
+                    println("${bold(item.location)} - $emojiClock ${red(" Time: $timestamp")} $emojiTemp ${red(" Temp: $temperature ${symbolDegree}C")} $emojiHumidity ${green(" Hum: $humidity%")}  ${emojiPressure}${blue(" Pres: $pressure hPa")} ${emojiWind}${white(" Wind: $wind km/h")}")
                 }
             }
         } else {
@@ -105,7 +106,20 @@ class MenuView {
         // Met.no Weather Forecast
         if (selectedLocation != null) {
             val forecast = Forecasts.getForecast(selectedLocation!!.latitude, selectedLocation!!.longitude)
-            println("Forecast for ${selectedLocation!!.name}: $forecast")
+            println("Forecast for ${selectedLocation!!.name}:")
+            if (forecast != null) {
+                for (entry in forecast.properties.timeseries){
+                    val conditions: String = getWeatherIcon(entry.data.next1_Hours?.summary?.symbolCode)
+                    val time: String = TimeHelper.getDisplayStringTZ(TimeHelper.fromISO8601(entry.time))
+                    val pressure: String = "$emojiPressure Pres: ${entry.data.instant.details.airPressureAtSeaLevel} ${forecast.properties.meta.units.airPressureAtSeaLevel}"
+                    val temperature: String = "$emojiTemp Temp: ${entry.data.instant.details.airTemperature} ${forecast.properties.meta.units.airTemperature}"
+                    val humidity: String = "$emojiHumidity Hum: ${entry.data.instant.details.relativeHumidity} ${forecast.properties.meta.units.relativeHumidity}"
+                    val windDir: String = "${entry.data.instant.details.windFromDirection} ${forecast.properties.meta.units.windFromDirection}"
+                    val windSpeed: String = "$emojiWind Wind: ${entry.data.instant.details.windSpeed} ${forecast.properties.meta.units.windSpeed}"
+                    val clouds: String = "$emojiCloud Cloud: ${entry.data.instant.details.cloudAreaFraction} ${forecast.properties.meta.units.cloudAreaFraction}"
+                    println("$time - $conditions [$temperature $pressure $humidity $windSpeed ($windDir) $clouds] ")
+                }
+            }
         } else {
             print("No location selected!")
         }
