@@ -13,6 +13,7 @@ import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiWeather
 import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.emojiWind
 import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.getWeatherIcon
 import ie.dylangore.mad1.assignment1.helpers.UnicodeHelper.symbolDegree
+import ie.dylangore.mad1.assignment1.locationsView
 import ie.dylangore.mad1.assignment1.models.Warning
 import ie.dylangore.mad1.assignment1.selectedLocation
 import ie.dylangore.mad1.assignment1.weather.Forecasts
@@ -34,8 +35,8 @@ class MenuView {
         with(TermColors()) {
             println()
             println((bold + brightBlue)("$emojiWeather Weather Info"))
-            val titleStyle = (red + underline)
-            println(titleStyle("Main Menu"))
+            locationsView.displaySelectedLocation()
+            println((red + underline)("Main Menu"))
             println("1. List Weather Warnings")
             println("2. List Observation Stations")
             println("3. Get Weather Forecast")
@@ -111,19 +112,19 @@ class MenuView {
                 for (entry in forecast.properties.timeseries){
                     val conditions: String = getWeatherIcon(entry.data.next1_Hours?.summary?.symbolCode)
                     val time: String = TimeHelper.getDisplayStringTZ(TimeHelper.fromISO8601(entry.time))
-                    val pressure: String = "$emojiPressure Pres: ${entry.data.instant.details.airPressureAtSeaLevel} ${forecast.properties.meta.units.airPressureAtSeaLevel}"
-                    val temperature: String = "$emojiTemp Temp: ${entry.data.instant.details.airTemperature} ${forecast.properties.meta.units.airTemperature}"
-                    val humidity: String = "$emojiHumidity Hum: ${entry.data.instant.details.relativeHumidity} ${forecast.properties.meta.units.relativeHumidity}"
-                    val windDir: String = "${entry.data.instant.details.windFromDirection} ${forecast.properties.meta.units.windFromDirection}"
-                    val windSpeed: String = "$emojiWind Wind: ${entry.data.instant.details.windSpeed} ${forecast.properties.meta.units.windSpeed}"
-                    val clouds: String = "$emojiCloud Cloud: ${entry.data.instant.details.cloudAreaFraction} ${forecast.properties.meta.units.cloudAreaFraction}"
+                    val pressure = "$emojiPressure Pres: ${entry.data.instant.details.airPressureAtSeaLevel} ${forecast.properties.meta.units.airPressureAtSeaLevel}"
+                    val temperature = "$emojiTemp Temp: ${entry.data.instant.details.airTemperature} ${forecast.properties.meta.units.airTemperature}"
+                    val humidity = "$emojiHumidity Hum: ${entry.data.instant.details.relativeHumidity} ${forecast.properties.meta.units.relativeHumidity}"
+                    val windDir = "${entry.data.instant.details.windFromDirection} ${forecast.properties.meta.units.windFromDirection}"
+                    val windSpeed = "$emojiWind Wind: ${entry.data.instant.details.windSpeed} ${forecast.properties.meta.units.windSpeed}"
+                    val clouds = "$emojiCloud Cloud: ${entry.data.instant.details.cloudAreaFraction} ${forecast.properties.meta.units.cloudAreaFraction}"
                     println("$time - $conditions [$temperature $pressure $humidity $windSpeed ($windDir) $clouds] ")
                 }
+            }else{
+                println("Unable to get a weather forecast for the selected location")
             }
         } else {
             print("No location selected!")
         }
     }
-
-
 }

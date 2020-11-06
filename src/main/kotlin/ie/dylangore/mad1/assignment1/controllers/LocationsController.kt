@@ -5,6 +5,7 @@ import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
 import ie.dylangore.mad1.assignment1.locations
 import ie.dylangore.mad1.assignment1.locationsView
 import ie.dylangore.mad1.assignment1.models.Location
+import ie.dylangore.mad1.assignment1.selectedLocation
 
 /**
  * Controller class for the locations menu
@@ -21,6 +22,7 @@ class LocationsController {
             2 -> addLocation()
             3 -> updateLocation()
             4 -> deleteLocation()
+            5 -> selectLocation()
             0 -> println("Back to main menu")
             else -> println("Invalid Option")
         }
@@ -70,7 +72,6 @@ class LocationsController {
                 println(red("Location not found!"))
             }
         }
-
     }
 
     /**
@@ -84,6 +85,22 @@ class LocationsController {
         val id = locationsView.getLocationId()
         if (locationsView.deleteLocationData(id)){
             locations.delete(id)
+            // Update the selected location
+            selectedLocation = if (locations.findAll().isNullOrEmpty()) null else locations.findAll().first()
         }
     }
+
+    /**
+     * Function to change the selected location
+     */
+    private fun selectLocation(){
+        clearTerminal()
+        // Display the select location menu
+        locationsView.displaySelectLocationMenu()
+        // Prompt the user to input a location ID
+        val location = findLocation()
+        // Set the user's choice as the selected location
+        selectedLocation = location
+    }
+
 }

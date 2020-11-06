@@ -1,10 +1,12 @@
 package ie.dylangore.mad1.assignment1.weather
 
 import com.beust.klaxon.Klaxon
+import ie.dylangore.mad1.assignment1.logger
 import ie.dylangore.mad1.assignment1.models.Forecast
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
+import java.lang.Exception
 
 /**
  * Object that handles getting and formatting forecast data
@@ -25,11 +27,12 @@ object Forecasts {
      */
     private fun apiRequest(baseUrl: String = "https://api.met.no/weatherapi/locationforecast/2.0/compact", latitude:Double = 52.2461, longitude:Double = -7.1387, altitude: Int = 0): String {
         val request = Request.Builder().url("$baseUrl?altitude=$altitude&lat=$latitude&lon=$longitude").header("User-Agent", "KotlinWeather").build()
-        var result : String
+        var result = "[]"
 
         client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = response.body!!.string()
+            if (response.isSuccessful) {
+                result = response.body!!.string()
+            }
         }
 
         return(result)
@@ -48,6 +51,11 @@ object Forecasts {
         // Check if data has been passed as a string, if not get new data from the API
         val forecastData: String = if (data.isEmpty()) apiRequest(latitude = latitude, longitude = longitude, altitude = altitude) else data
         // Parse the data and return it as a Forecast object
-        return (Klaxon().parse(forecastData))
+        return try{
+            Klaxon().parse(forecastData)
+        }catch (ex: Exception){
+            logger.error("Error while parsing forecast data")
+            null
+        }
     }
 }

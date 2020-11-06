@@ -5,7 +5,9 @@ import ie.dylangore.mad1.assignment1.helpers.InputHelper
 import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
 import ie.dylangore.mad1.assignment1.helpers.ValidationHelper
 import ie.dylangore.mad1.assignment1.locations
+import ie.dylangore.mad1.assignment1.locationsController
 import ie.dylangore.mad1.assignment1.models.Location
+import ie.dylangore.mad1.assignment1.selectedLocation
 
 /**
  * View class for the locations menu
@@ -28,6 +30,7 @@ class LocationsView {
             println("2. Add a new location")
             println("3. Update an existing location")
             println("4. Delete a location")
+            println("5. Select forecast location")
             println()
             println("0. Return to main menu")
             println()
@@ -122,6 +125,30 @@ class LocationsView {
     }
 
     /**
+     * Display the select location menu
+     */
+    fun displaySelectLocationMenu() {
+        // Display the prompts to the user
+        with(TermColors()) {
+            println(underline("Select location"))
+            displaySelectedLocation()
+            listLocations()
+        }
+    }
+
+    /**
+     * Display the currently selected location
+     *
+     */
+    fun displaySelectedLocation(){
+        // Get the location name
+        val locationName = selectedLocation?.name ?: "No location selected"
+        with(TermColors()){
+            println(bold("Selected Location: ") + locationName)
+        }
+    }
+
+    /**
      * Prompt the user to enter a location ID
      *
      * @return the entered ID
@@ -129,5 +156,4 @@ class LocationsView {
     fun getLocationId(): Long{
         return InputHelper.getLongInput("Enter the location ID")
     }
-
 }
