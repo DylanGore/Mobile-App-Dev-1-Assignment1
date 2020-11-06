@@ -1,4 +1,4 @@
-package ie.dylangore.mad1.assignment1.datamodels
+package ie.dylangore.mad1.assignment1.models
 
 /**
  * Data class for a list of ObservationStations

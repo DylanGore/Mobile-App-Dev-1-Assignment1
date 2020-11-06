@@ -1,7 +1,7 @@
 package ie.dylangore.mad1.assignment1.weather
 
 import com.beust.klaxon.Klaxon
-import ie.dylangore.mad1.assignment1.datamodels.Warning
+import ie.dylangore.mad1.assignment1.models.Warning
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
