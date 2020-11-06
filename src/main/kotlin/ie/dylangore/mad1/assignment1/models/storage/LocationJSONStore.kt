@@ -9,6 +9,7 @@ import ie.dylangore.mad1.assignment1.helpers.FileHelper.write
 import ie.dylangore.mad1.assignment1.helpers.ValidationHelper
 import ie.dylangore.mad1.assignment1.models.Location
 import mu.KotlinLogging
+import java.lang.reflect.Type
 
 
 /**
@@ -17,9 +18,9 @@ import mu.KotlinLogging
  */
 class LocationJSONStore: LocationStore {
 
-    val JSON_FILE = "locations.json"
-    val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-    val listType = object : TypeToken<java.util.ArrayList<Location>>() {}.type
+    private val jsonFile = "locations.json"
+    private val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting().create()
+    private val listType: Type = object : TypeToken<java.util.ArrayList<Location>>() {}.type
 
     private val logger = KotlinLogging.logger {}
 
@@ -30,7 +31,7 @@ class LocationJSONStore: LocationStore {
      */
     init {
         // If a JSON file exists, import the data from it
-        if (exists(JSON_FILE)) {
+        if (exists(jsonFile)) {
             deserialize()
         }
     }
@@ -131,7 +132,7 @@ class LocationJSONStore: LocationStore {
         // Convert the existing list to a JSON String
         val jsonString = gsonBuilder.toJson(locations, listType)
         // Write the JSON data to the file
-        write(JSON_FILE, jsonString)
+        write(jsonFile, jsonString)
     }
 
     /**
@@ -140,7 +141,7 @@ class LocationJSONStore: LocationStore {
      */
     private fun deserialize() {
         // Get the JSON data as a String
-        val jsonString = read(JSON_FILE)
+        val jsonString = read(jsonFile)
         // Convert the JSON string to a list and replace the existing list
         locations = Gson().fromJson(jsonString, listType)
     }

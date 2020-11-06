@@ -5,7 +5,6 @@ import ie.dylangore.mad1.assignment1.helpers.InputHelper
 import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
 import ie.dylangore.mad1.assignment1.helpers.ValidationHelper
 import ie.dylangore.mad1.assignment1.locations
-import ie.dylangore.mad1.assignment1.locationsController
 import ie.dylangore.mad1.assignment1.models.Location
 import ie.dylangore.mad1.assignment1.selectedLocation
 

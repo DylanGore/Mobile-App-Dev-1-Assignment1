@@ -139,6 +139,7 @@ object InputHelper {
      * @param default the default option (i.e. is the default option yes or no)
      * @return the result as a boolean
      */
+    @Suppress("RedundantWith")
     fun yesNoPrompt(prompt: String = "Are you sure", default: Boolean = false): Boolean{
         // Define the default option String to display
         val defaultStr = if (default) "[Y/n]" else "[y/N]"
