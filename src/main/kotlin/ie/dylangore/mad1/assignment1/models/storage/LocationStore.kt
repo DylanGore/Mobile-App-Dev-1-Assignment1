@@ -42,4 +42,9 @@ interface LocationStore {
      * @param id the ID of the location to delete
      */
     fun delete(id: Long)
+
+    /**
+     * Delete all entries from the list
+     */
+    fun empty()
 }

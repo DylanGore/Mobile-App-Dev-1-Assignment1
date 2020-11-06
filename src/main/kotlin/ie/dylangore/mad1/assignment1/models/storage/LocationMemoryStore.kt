@@ -83,6 +83,13 @@ class LocationMemoryStore: LocationStore {
     }
 
     /**
+     * Delete all entries from the list
+     */
+    override fun empty() {
+        locations.removeAll(locations)
+    }
+
+    /**
      * Get the next available element ID
      *
      * @return the new ID as a Long

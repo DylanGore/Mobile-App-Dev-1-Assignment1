@@ -65,4 +65,20 @@ object FileHelper {
         val file = File(fileName)
         return file.exists()
     }
+
+    /**
+     * Delete a file
+     *
+     * @param fileName the name of the file to delete
+     */
+    fun delete(fileName: String){
+        // Delete the file if it exists
+        if (exists(fileName)){
+            val file = File(fileName)
+            file.delete()
+            logger.info("File $fileName deleted")
+        }else{
+            logger.warn("File $fileName doesn't exist. Nothing to delete.")
+        }
+    }
 }

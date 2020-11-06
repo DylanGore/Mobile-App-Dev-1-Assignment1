@@ -108,6 +108,14 @@ class LocationJSONStore: LocationStore {
     }
 
     /**
+     * Delete all entries from the list
+     */
+    override fun empty() {
+        locations.removeAll(locations)
+        serialize()
+    }
+
+    /**
      * Get the next available element ID
      *
      * @return the new ID as a Long
