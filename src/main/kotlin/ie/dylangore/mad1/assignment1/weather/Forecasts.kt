@@ -1,11 +1,10 @@
 package ie.dylangore.mad1.assignment1.weather
 
 import com.beust.klaxon.Klaxon
-import ie.dylangore.mad1.assignment1.logger
+import ie.dylangore.mad1.assignment1.helpers.LogHelper.logger
 import ie.dylangore.mad1.assignment1.models.Forecast
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okio.IOException
 import java.lang.Exception
 
 /**

@@ -9,6 +9,7 @@ import mu.KotlinLogging
  * Class that manages storing location data in memory
  *
  */
+@Suppress("unused")
 class LocationMemoryStore: LocationStore {
 
     private val logger = KotlinLogging.logger {}

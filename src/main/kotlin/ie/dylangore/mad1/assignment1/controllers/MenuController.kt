@@ -2,6 +2,7 @@ package ie.dylangore.mad1.assignment1.controllers
 
 import ie.dylangore.mad1.assignment1.*
 import ie.dylangore.mad1.assignment1.helpers.FileHelper.delete
+import ie.dylangore.mad1.assignment1.helpers.LogHelper.logger
 import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
 import ie.dylangore.mad1.assignment1.models.Location
 import ie.dylangore.mad1.assignment1.sampledata.SampleData

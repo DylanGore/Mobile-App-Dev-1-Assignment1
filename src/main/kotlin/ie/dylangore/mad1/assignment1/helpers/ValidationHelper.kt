@@ -1,6 +1,6 @@
 package ie.dylangore.mad1.assignment1.helpers
 
-import ie.dylangore.mad1.assignment1.logger
+import ie.dylangore.mad1.assignment1.helpers.LogHelper.logger
 import ie.dylangore.mad1.assignment1.models.Location
 
 /**
