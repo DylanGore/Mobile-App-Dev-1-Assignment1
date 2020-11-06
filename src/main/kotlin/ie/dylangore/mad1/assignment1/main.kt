@@ -3,13 +3,13 @@ package ie.dylangore.mad1.assignment1
 import ie.dylangore.mad1.assignment1.controllers.LocationsController
 import ie.dylangore.mad1.assignment1.controllers.MenuController
 import ie.dylangore.mad1.assignment1.models.Location
-import ie.dylangore.mad1.assignment1.models.storage.LocationMemoryStore
+import ie.dylangore.mad1.assignment1.models.storage.LocationJSONStore
 import ie.dylangore.mad1.assignment1.views.LocationsView
 import ie.dylangore.mad1.assignment1.views.MenuView
 
 // Define instances of each of the required views and controllers
 val locationsView: LocationsView = LocationsView()
-val locations = LocationMemoryStore()
+val locations = LocationJSONStore()
 val menuView = MenuView()
 val locationsController = LocationsController()
 
