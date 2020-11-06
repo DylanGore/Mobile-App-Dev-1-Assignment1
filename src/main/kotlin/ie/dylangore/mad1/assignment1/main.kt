@@ -21,6 +21,8 @@ fun main(args: Array<String>) {
 
     var input: Int
 
+    clearTerminal()
+
     do {
         input = menu()
         when(input) {
@@ -38,7 +40,7 @@ fun main(args: Array<String>) {
 /**
  * Display the main menu
  *
- * @return the option slected by the user
+ * @return the option selected by the user
  */
 fun menu() : Int {
     // Display the menu (With colour in supported environments)
@@ -64,6 +66,7 @@ fun menu() : Int {
  * Display a list of current weather warnings
  */
 fun displayWeatherWarnings(){
+    clearTerminal()
     // Met Éireann Weather Warnings
     val warnings = Warnings.getWeatherWarnings()
     if (warnings.isNotEmpty()){
@@ -80,6 +83,7 @@ fun displayWeatherWarnings(){
  * Display a list of observation stations with the latest conditions recorded at each
  */
 fun displayObservationStations(){
+    clearTerminal()
     // Met Éireann Observation Stations
     val stations = Stations.getMetEireannStations()
     if (stations != null){
@@ -102,6 +106,7 @@ fun displayObservationStations(){
  * Display the weather forecast for the currently selected location
  */
 fun displayWeatherForecast(){
+    clearTerminal()
     // Met.no Weather Forecast
     val forecast = Forecasts.getForecast(selectedLocation.latitude, selectedLocation.longitude)
     println("Forecast for ${selectedLocation.name}: $forecast")
@@ -111,6 +116,7 @@ fun displayWeatherForecast(){
  * Display a menu to allow the user to manage saved locations
  */
 fun displayManageLocationsMenu(){
+    clearTerminal()
     // Display the menu (With colour in supported environments)
     with(TermColors()) {
         println()
@@ -141,6 +147,7 @@ fun displayManageLocationsMenu(){
  * Function to list saved locations (TODO)
  */
 fun listLocations(){
+    clearTerminal()
     with(TermColors()) {
         if (locations.isNotEmpty()){
             for(location in locations){
@@ -167,8 +174,8 @@ fun findLocation(id: Long = -1): Location? {
  * Function to add a new location to the saved locations list (TODO)
  */
 fun addLocation(){
-
-    // Define inputs
+    clearTerminal()
+    listLocations()
     var name: String = ""
     var latitude: Double
     var longitude: Double
@@ -192,8 +199,8 @@ fun addLocation(){
  * Function to update a location in the saved locations list (TODO)
  */
 fun updateLocation(){
-    // Define inputs
-    var name = ""
+    clearTerminal()
+    listLocations()
     var latitude: Double
     var longitude: Double
     var altitude: Int = 0
@@ -226,6 +233,8 @@ fun updateLocation(){
  * Function to delete a location from the saved locations list (TODO)
  */
 fun deleteLocation(){
+    clearTerminal()
+    listLocations()
     // Get the location the user wishes to delete
     val location = findLocation()
 
@@ -264,7 +273,12 @@ fun getStringInputRepeat(prompt: String, oldVal: Any = ""): String {
             print(bold("$prompt$oldValStr: "))
             input = readLine()!!
             if (input.isEmpty()){
-                println(red("Invalid! Please enter a text value"))
+                // If the old value is defined and the user presses enter without inputting anything, return the old value
+                if (oldVal.toString().isNotEmpty()){
+                    return oldVal as String
+                }else{
+                    println(red("Invalid! Please enter a text value"))
+                }
             }
         } while (input.isEmpty())
     }
@@ -281,7 +295,7 @@ fun getStringInputRepeat(prompt: String, oldVal: Any = ""): String {
 fun getDoubleInputRepeat(prompt: String, oldVal: Any = ""): Double {
     var input: String
     // Format the old variable for display if it is defined
-    var oldValStr: String = ""
+    var oldValStr = ""
     if (oldVal.toString().isNotBlank()){
         oldValStr = " [$oldVal]"
     }
@@ -290,10 +304,16 @@ fun getDoubleInputRepeat(prompt: String, oldVal: Any = ""): Double {
         do {
             print(bold("$prompt$oldValStr: "))
             input = readLine()!!
+
+            // If the old value is defined and the user presses enter without inputting anything, return the old value
+            if (oldVal.toString().isNotEmpty()){
+                if(oldVal.toString().toDoubleOrNull() != null) return oldVal as Double
+            }
+
             if (input.toDoubleOrNull() == null){
                 println(red("Invalid! Please enter a double value"))
             }
-        } while (input.toDoubleOrNull() == null && input.isNotEmpty())
+        } while (input.toDoubleOrNull() == null && input.isEmpty())
     }
 
     return input.toDouble()
@@ -309,7 +329,7 @@ fun getDoubleInputRepeat(prompt: String, oldVal: Any = ""): Double {
  */
 fun getIntInput(prompt: String = "Select an option", oldVal: Any = ""): Int{
     // Format the old variable for display if it is defined
-    var oldValStr: String = ""
+    var oldValStr = ""
     if (oldVal.toString().isNotBlank()){
         oldValStr = " [$oldVal]"
     }
@@ -317,8 +337,15 @@ fun getIntInput(prompt: String = "Select an option", oldVal: Any = ""): Int{
     with(TermColors()){
         print(bold("$prompt$oldValStr: "))
     }
+
     // Store the input String
     val input = readLine()!!
+
+    // If the old value is defined and the user presses enter without inputting anything, return the old value
+    if (input.isBlank() && oldVal.toString().isNotEmpty()){
+        if(oldVal.toString().toIntOrNull() != null) return oldVal as Int
+    }
+
     // Simple input validation and convert to Integer option
     return if (input.toIntOrNull() != null && input.isNotEmpty()) input.toInt() else 0
 }
@@ -343,8 +370,14 @@ fun getLongInput(prompt: String = "Select an option", oldVal: Any = ""): Long{
     }
     // Store the input String
     val input = readLine()!!
+
+    // If the old value is defined and the user presses enter without inputting anything, return the old value
+    if (input.isBlank() && oldVal.toString().isNotEmpty()){
+        if(oldVal.toString().toLongOrNull() != null) return oldVal as Long
+    }
+
     // Simple input validation and convert to long
-    return if (input.toIntOrNull() != null && input.isNotEmpty()) input.toLong() else 0
+    return if (input.toLongOrNull() != null && input.isNotEmpty()) input.toLong() else 0
 }
 
 /**
@@ -362,16 +395,24 @@ fun yesNoPrompt(prompt: String = "Are you sure", default: Boolean = false): Bool
         print("$prompt? $defaultStr")
         val input = readLine()!!
         // If the response is empty, return the default option
-        if (input.isEmpty()){
-            return default
+        return if (input.isEmpty()){
+            default
         }else{
             // If the response starts with a Y return true, if it starts with an N return false,
             // if the response starts with anything else, return the default option
-            return when {
+            when {
                 input.toLowerCase().startsWith("y") -> true
                 input.toLowerCase().startsWith("n") -> false
                 else -> default
             }
         }
     }
+}
+
+/**
+ * Simple function that prints a unicode character to clear the terminal
+ *
+ */
+fun clearTerminal(){
+    print("\u001b[H\u001b[2J")
 }
