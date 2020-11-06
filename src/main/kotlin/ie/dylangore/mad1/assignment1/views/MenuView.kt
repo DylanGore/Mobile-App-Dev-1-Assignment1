@@ -3,6 +3,7 @@ package ie.dylangore.mad1.assignment1.views
 import com.github.ajalt.mordant.TermColors
 import ie.dylangore.mad1.assignment1.helpers.InputHelper.getIntInput
 import ie.dylangore.mad1.assignment1.helpers.TerminalHelper.clearTerminal
+import ie.dylangore.mad1.assignment1.models.Warning
 import ie.dylangore.mad1.assignment1.selectedLocation
 import ie.dylangore.mad1.assignment1.weather.Forecasts
 import ie.dylangore.mad1.assignment1.weather.Stations
@@ -42,14 +43,22 @@ class MenuView {
     /**
      * Display a list of current weather warnings
      */
-    fun displayWeatherWarnings() {
+    fun displayWeatherWarnings(warningsList: List<Warning.WarningItem> = listOf()) {
         clearTerminal()
         // Met Éireann Weather Warnings
-        val warnings = Warnings.getWeatherWarnings()
+        val warnings = if (warningsList.isNullOrEmpty()) Warnings.getWeatherWarnings() else warningsList
         if (warnings.isNotEmpty()) {
             println("Weather Warnings (${warnings.size})")
             for (item in warnings) {
-                println(item.headline)
+                // Display the weather warnings in a color that matches the warning level
+                with(TermColors()){
+                    when(item.level.toLowerCase()){
+                        "red" -> println(brightRed(item.headline))
+                        "orange" -> println(yellow(item.headline))
+                        "yellow" -> println(brightYellow(item.headline))
+                        else -> println(item.headline)
+                    }
+                }
             }
         } else {
             println("There are currently no active weather warnings/advisories")
