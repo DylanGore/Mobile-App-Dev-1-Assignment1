@@ -7,6 +7,7 @@ import ie.dylangore.mad1.assignment1.selectedLocation
 import ie.dylangore.mad1.assignment1.weather.Forecasts
 import ie.dylangore.mad1.assignment1.weather.Stations
 import ie.dylangore.mad1.assignment1.weather.Warnings
+import java.text.SimpleDateFormat
 
 /**
  * View class for the main menu
@@ -62,15 +63,20 @@ class MenuView {
         clearTerminal()
         // Met Éireann Observation Stations
         val stations = Stations.getMetEireannStations()
+        // The timestamp format stored with each station
+        val timestampFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        // The format to display each timstamp in
+        val displayFormat = SimpleDateFormat("HH:mm dd/MM/yyyy")
         if (stations != null) {
             println("Met Éireann Observation Stations (${stations.size})")
             for (item in stations) {
+                val timestamp:String = displayFormat.format(timestampFormat.parse(item.time)).toString()
                 val temperature: String = if (item.temperature != null) item.temperature.toString() else "N/A"
                 val humidity: String = if (item.humidity != null) item.humidity.toString() else "N/A"
                 val pressure: String = if (item.pressure != null) item.pressure.toString() else "N/A"
                 val wind: String = if (item.wind_speed != null) item.wind_speed.toString() else "N/A"
                 with(TermColors()) {
-                    println("${bold(item.location)} - ${String(Character.toChars(0x1F321))}${red(" Temp: $temperature °C")}  ${
+                    println("${bold(item.location)} - ${String(Character.toChars(0x1F550))}${red(" Time: $timestamp")} ${String(Character.toChars(0x1F321))}${red(" Temp: $temperature °C")}  ${
                         String(Character.toChars(0x1F4A7))
                     }${green(" Hum: $humidity%")}  ${String(Character.toChars(0x2652))}${blue(" Pres: $pressure hPa")} ${
                         String(Character.toChars(0x1F300))
