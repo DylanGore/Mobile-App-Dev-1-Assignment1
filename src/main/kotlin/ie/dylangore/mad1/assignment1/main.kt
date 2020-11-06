@@ -1,9 +1,27 @@
 package ie.dylangore.mad1.assignment1
 
-import mu.KotlinLogging
+import ie.dylangore.mad1.assignment1.controllers.LocationsController
+import ie.dylangore.mad1.assignment1.controllers.MenuController
+import ie.dylangore.mad1.assignment1.models.Location
+import ie.dylangore.mad1.assignment1.models.storage.LocationJSONStore
+import ie.dylangore.mad1.assignment1.views.LocationsView
+import ie.dylangore.mad1.assignment1.views.MenuView
 
-private val logger = KotlinLogging.logger {}
+// Define instances of each of the required views and controllers
+val locationsView: LocationsView = LocationsView()
+val locations = LocationJSONStore()
+val menuView = MenuView()
+val locationsController = LocationsController()
 
+// The currently selected location
+var selectedLocation: Location? = null
+
+/**
+ * Main entrypoint for the console version of the application
+ *
+ * @param args
+ */
 fun main(args: Array<String>) {
-    logger.info { "Mobile App Dev 1 Assignment 1" }
+    // Display the main menu
+    MenuController().start()
 }
